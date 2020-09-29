@@ -1,6 +1,7 @@
 import React,{ Component } from 'react';
 import './App.css';
 import Customer from './components/Customer'
+import CustomerAdd from './components/CustomerAdd'
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -30,8 +31,9 @@ class App extends Component{
 
   componentDidMount(){
     this.timer = setInterval(this.progress,20);
-
-    
+    this.callApi()
+      .then(res => this.setState({customers: res}))
+      .catch(err => console.log(err));
   } 
 
   callApi = async () => {
@@ -43,14 +45,12 @@ class App extends Component{
   progress = () => {
     const { completed} = this.state;
     this.setState({ completed: completed >= 100 ? 0 : completed + 1});
-    this.callApi()
-      .then(res => this.setState({customers: res}))
-      .catch(err => console.log(err));
   }
 
   render(){
     const { classes} = this.props;
   return (
+    <div>
     <Paper className={classes.root}>
     <Table className={classes.table}>
     <TableHead>
@@ -82,6 +82,8 @@ class App extends Component{
     </TableBody>
   </Table>
   </Paper>
+  <CustomerAdd/>
+  </div>
   );
  }
 }
